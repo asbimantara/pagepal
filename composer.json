@@ -1,0 +1,11 @@
+{
+    "name": "user/book",
+    "authors": [
+        {
+            "name": "asbimantara"
+        }
+    ],
+    "require": {
+        "mongodb/mongodb": "^1.20"
+    }
+}

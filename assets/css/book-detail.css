@@ -1,0 +1,588 @@
+.book-detail {
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+}
+
+.book-header {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.book-cover {
+  flex-shrink: 0;
+  width: 250px;
+  height: 375px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.book-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-info h1 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.author {
+  color: #666;
+  margin: 0.5rem 0 2rem;
+  font-size: 1.2rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.progress-info {
+  margin-bottom: 2rem;
+  max-width: 100%;
+}
+
+.progress-bar {
+  background: #f5f5f5;
+  height: 10px;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  width: 100%;
+}
+
+.progress {
+  background: var(--primary-color);
+  height: 100%;
+  transition: width 0.3s ease;
+  max-width: 100%;
+}
+
+/* Notes Section */
+.book-notes {
+  margin-top: 3rem;
+  border-top: 1px solid #eee;
+  padding-top: 2rem;
+}
+
+.book-notes h2 {
+  margin-bottom: 2rem;
+}
+
+.note-form {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.note-form textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  resize: vertical;
+}
+
+.notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.note-card {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 10px;
+  border-left: 4px solid var(--primary-color);
+}
+
+.note-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.note-content {
+  white-space: pre-line;
+  color: var(--text-color);
+  position: relative;
+  max-height: 4.5em; /* 3 baris (1.5 × 3) */
+  overflow: hidden;
+  line-height: 1.5;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  transition: max-height 0.3s ease;
+}
+
+.note-content.expanded {
+  max-height: none;
+}
+
+.note-content-toggle {
+  background: none;
+  border: none;
+  color: #4CAF50;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  margin-top: 5px;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.note-content-toggle:hover {
+  color: #45a049;
+}
+
+.empty-notes {
+  text-align: center;
+  color: #666;
+  padding: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .book-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .book-cover {
+    width: 200px;
+    height: 300px;
+  }
+
+  .book-info {
+    width: 100%;
+  }
+
+  .book-info h1 {
+    font-size: 1.5rem;
+  }
+
+  .progress-info {
+    width: 100%;
+  }
+}
+
+.form-text {
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0.25rem;
+}
+
+/* Menambahkan margin untuk button simpan catatan */
+.note-form button[type="submit"] {
+    width: 100%;
+    margin-top: 15px;  
+}
+
+/* Atau alternatifnya, bisa menambahkan margin di input halaman */
+.note-form input[type="number"] {
+    margin-bottom: 15px;
+}
+
+.book-date {
+    color: #666;
+    font-size: 1rem;
+    margin: 0.5rem 0 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.book-date i {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+}
+
+/* Tambahkan style untuk note actions */
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.note-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.btn-icon:hover {
+    color: #4CAF50;
+}
+
+.btn-icon-danger:hover {
+    color: #dc3545;
+}
+
+/* Modal styles untuk edit dan delete */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    padding: 2.5rem;
+    width: 90%;
+    max-width: 500px;
+    margin: 10vh auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.modal-content .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.modal-content label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.modal-content textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+}
+
+.modal-content textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    outline: none;
+}
+
+.modal-content input[type="number"] {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.modal-content input[type="number"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    outline: none;
+}
+
+.modal-content .form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modal-content .btn-secondary,
+.modal-content .btn-primary,
+.modal-content .btn-danger {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.modal-content .btn-secondary {
+    background: #f5f5f5;
+    color: var(--text-color);
+    border: none;
+}
+
+.modal-content .btn-primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.modal-content .btn-danger {
+    background: #dc3545;
+    color: white;
+    border: none;
+}
+
+.modal-content .btn-secondary:hover {
+    background: #e0e0e0;
+    transform: translateY(-2px);
+}
+
+.modal-content .btn-primary:hover {
+    background: #5952ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+}
+
+.modal-content .btn-danger:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .modal-content {
+        padding: 1.5rem;
+        margin: 5vh auto;
+        width: 95%;
+    }
+
+    .modal-content h2 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .modal-content .form-actions {
+        flex-direction: column;
+        margin-top: 1.5rem;
+    }
+
+    .modal-content .btn-secondary,
+    .modal-content .btn-primary,
+    .modal-content .btn-danger {
+        width: 100%;
+        padding: 0.8rem;
+    }
+}
+
+/* Style untuk form tambah catatan */
+.note-form .form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.note-form textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 1rem;
+    line-height: 1.5;
+    transition: all 0.3s ease;
+}
+
+.note-form textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    outline: none;
+}
+
+.character-count {
+    position: absolute;
+    right: 10px;
+    bottom: -20px;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.page-input-container {
+    position: relative;
+}
+
+.page-input-container input {
+    width: 100%;
+    padding: 0.8rem;
+    padding-right: 100px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.page-input-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+    outline: none;
+}
+
+.page-info {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #666;
+    font-size: 0.9rem;
+    background: white;
+    padding: 0 5px;
+}
+
+/* Style untuk placeholder */
+.note-form textarea::placeholder {
+    color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .note-form textarea {
+        min-height: 100px;
+    }
+    
+    .character-count {
+        bottom: -18px;
+        font-size: 0.75rem;
+    }
+    
+    .page-info {
+        font-size: 0.8rem;
+    }
+}
+
+/* Button Styles */
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    display: inline-block;
+    margin: 10px 0;
+}
+
+.btn-primary:hover {
+    background-color: #45a049;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+.btn-icon:hover {
+    color: #4CAF50;
+}
+
+.btn-icon-danger:hover {
+    color: #dc3545;
+}
+
+/* Rating Section Styles */
+.rating-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
+}
+
+.rating-section h3 {
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.rating-stars {
+    display: flex;
+    gap: 5px;
+    margin: 10px 0;
+}
+
+.star-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #ddd;
+    transition: color 0.3s ease;
+    padding: 5px;
+}
+
+.star-btn:hover,
+.star-btn.active {
+    color: #ffd700;
+}
+
+/* Form Submit Button */
+.note-form button[type="submit"] {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.rating-info {
+    color: #666;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.completion-info {
+    margin-top: 0.5rem;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(108, 99, 255, 0.1);
+    padding: 0.8rem 1rem;
+    border-radius: 5px;
+    line-height: 1.4;
+}
+
+.completion-info i {
+    font-size: 1rem;
+    flex-shrink: 0;
+}

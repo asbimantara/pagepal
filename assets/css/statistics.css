@@ -1,0 +1,308 @@
+.statistics-card {
+  background: white;
+  border-radius: 15px;
+  padding: 2.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.statistics-card h1 {
+  text-align: center;
+  margin-bottom: 3rem;
+  color: var(--text-color);
+  font-size: 2rem;
+  position: relative;
+}
+
+.statistics-card h1::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 3px;
+  background: var(--primary-color);
+  border-radius: 2px;
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.stat-item {
+  background: white;
+  padding: 1.8rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.stat-item i {
+  font-size: 2.2rem;
+  color: var(--primary-color);
+  opacity: 0.9;
+}
+
+.stat-info h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.stat-info p {
+  margin: 0.4rem 0 0;
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+/* Achievement Section */
+.achievement-section {
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 2px solid #f0f0f0;
+}
+
+.achievement-section h2 {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: var(--text-color);
+  font-size: 1.6rem;
+}
+
+.achievement-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  margin-bottom: 2.5rem;
+}
+
+.achievement-icon {
+  background: var(--primary-color);
+  width: 70px;
+  height: 70px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.achievement-icon i {
+  color: white;
+  font-size: 2.5rem;
+}
+
+.achievement-info {
+  flex: 1;
+}
+
+.achievement-info h3 {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+.achievement-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: var(--text-color);
+}
+
+.achievement-next {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.books-remaining {
+  font-weight: bold;
+  color: var(--primary-color);
+}
+
+/* Levels List */
+.levels-list {
+  margin-top: 3rem;
+  background: #f8f9fa;
+  padding: 2.5rem;
+  border-radius: 15px;
+}
+
+.levels-list h3 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text-color);
+  font-size: 1.4rem;
+}
+
+.level-items {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.level-item {
+  background: white;
+  padding: 1.2rem 1.5rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s ease;
+}
+
+.level-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.level-item.current {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.level-item.completed {
+  background: #f8faf8;
+  border: 1px solid #e8f0e8;
+}
+
+.level-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.level-info i {
+  font-size: 1.3rem;
+  width: 1.8rem;
+  color: var(--primary-color);
+}
+
+.level-name {
+  font-weight: 500;
+  font-size: 1.1rem;
+}
+
+.level-books {
+  font-size: 0.9rem;
+  color: #666;
+  padding: 0.4rem 0.8rem;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 20px;
+}
+
+.level-item.current .level-books {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.level-item.completed .level-info i,
+.level-item.completed .level-name {
+  color: #2e7d32;
+}
+
+.level-item.completed .level-books {
+  background: rgba(46, 125, 50, 0.1);
+  color: #2e7d32;
+}
+
+/* Progress Bar */
+.achievement-progress {
+  background: #f0f0f0;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.achievement-progress-bar {
+  background: var(--primary-color);
+}
+
+.progress-text {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .statistics-card {
+    padding: 1.5rem;
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .achievement-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem;
+    gap: 1.5rem;
+  }
+
+  .level-items {
+    grid-template-columns: 1fr;
+  }
+
+  .level-item {
+    padding: 1rem;
+  }
+}
+
+/* Container Wrapper */
+.statistics-wrapper {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+/* Stats Enhancements */
+.current-pages {
+    color: var(--primary-color);
+}
+
+.rating-max {
+    font-size: 1rem;
+    opacity: 0.7;
+}
+
+/* Additional Responsive Adjustments */
+@media (max-width: 768px) {
+    .statistics-wrapper {
+        margin: 1rem auto;
+    }
+
+    .achievement-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .achievement-icon i {
+        font-size: 2rem;
+    }
+}
