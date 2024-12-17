@@ -2,6 +2,10 @@
 
 Aplikasi tracking buku menggunakan PHP dan MongoDB
 
+## Demo
+Aplikasi dapat diakses di: [PagePal App](https://pagepal-production.up.railway.app) 
+(ganti dengan URL Railway Anda)
+
 ## Persyaratan
 
 - PHP >= 7.4
