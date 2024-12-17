@@ -13,8 +13,8 @@ Aplikasi tracking buku menggunakan PHP dan MongoDB
 
 1. Clone repository
 ```bash
-git clone https://github.com/username/nama-repository.git
-cd nama-repository
+git clone https://github.com/asbimantara/pagepal.git
+cd pagepal
 ```
 
 2. Install dependencies
@@ -31,4 +31,4 @@ composer install
 php -S localhost:8000
 ```
 
-5. Buka browser dan akses `http://localhost:8000` 
+5. Buka browser dan akses `http://localhost:8000`
