@@ -8,7 +8,7 @@ Aplikasi dapat diakses di: [PagePal App](https://pagepal-production.up.railway.a
 
 ## Persyaratan
 
-- PHP >= 7.4
+- PHP >= 8.2
 - MongoDB
 - Composer
 - MongoDB PHP Extension
