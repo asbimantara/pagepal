@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: pagepal
+    env: php
+    buildCommand: composer install
+    startCommand: php -S 0.0.0.0:$PORT
+    envVars:
+      - key: MONGODB_URI
+        sync: false
+      - key: DB_NAME
+        value: bookTracker 
