@@ -8,17 +8,12 @@
         "vlucas/phpdotenv": "^5.6",
         "ext-mongodb": "*"
     },
-    "require-dev": {
-        "heroku/heroku-buildpack-php": "*"
-    },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "chmod -R 755 vendor/bin/heroku-php-apache2"
-        ]
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     }
 }
