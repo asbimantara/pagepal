@@ -8,6 +8,7 @@ RUN apt-get update && apt-get install -y \
     git \
     zip \
     unzip \
+    libzip-dev \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     && docker-php-ext-install zip
