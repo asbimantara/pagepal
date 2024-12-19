@@ -36,9 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="auth-card">
             <div class="auth-header">
                 <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" 
-                     alt="Book Tracker Logo" 
-                     class="auth-logo"
-                     onerror="this.onerror=null; this.src='../assets/images/logo.png';">
+                     alt="PagePal Logo" 
+                     class="auth-logo">
                 <h1>Masuk ke PagePal</h1>
             </div>
             

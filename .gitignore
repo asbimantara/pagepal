@@ -1,6 +1,4 @@
-/vendor/
-/uploads/
 .env
-composer.phar
-*.log
+vendor/
+uploads/
 .DS_Store 
