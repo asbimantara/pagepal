@@ -3,18 +3,22 @@ session_start();
 require_once '../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = filter_var($_POST['email'], FILTER_SANITIZE_EMAIL);
-    $password = $_POST['password'];
+    try {
+        $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+        $password = $_POST['password'];
 
-    $user = $database->users->findOne(['email' => $email]);
+        $user = $database->users->findOne(['email' => $email]);
 
-    if ($user && password_verify($password, $user->password)) {
-        $_SESSION['user_id'] = (string)$user->_id;
-        $_SESSION['user_name'] = $user->name;
-        header("Location: ../dashboard.php");
-        exit();
-    } else {
-        $error = "Email atau password salah!";
+        if ($user && password_verify($password, $user->password)) {
+            $_SESSION['user_id'] = (string)$user->_id;
+            $_SESSION['user_name'] = $user->name;
+            header("Location: ../index.php");
+            exit();
+        } else {
+            $error = "Email atau password salah!";
+        }
+    } catch (Exception $e) {
+        $error = "Error: " . $e->getMessage();
     }
 }
 ?>
