@@ -13,6 +13,6 @@ try {
     $mongoClient = new MongoDB\Client($mongoUri);
     $database = $mongoClient->$dbName;
 } catch (Exception $e) {
-    die("Error koneksi ke MongoDB: " . $e->getMessage());
+    throw new Exception("Error koneksi ke MongoDB: " . $e->getMessage());
 }
 ?> 

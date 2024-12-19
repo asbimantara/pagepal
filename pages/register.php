@@ -3,32 +3,36 @@ session_start();
 require_once '../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
-    $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    try {
+        $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
+        $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
+        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    // Cek email sudah terdaftar
-    $existingUser = $database->users->findOne(['email' => $email]);
-    
-    if ($existingUser) {
-        $error = "Email sudah terdaftar!";
-    } else {
-        $result = $database->users->insertOne([
-            'name' => $name,
-            'email' => $email,
-            'password' => $password,
-            'created_at' => new MongoDB\BSON\UTCDateTime(),
-            'books' => []
-        ]);
-
-        if ($result->getInsertedCount() > 0) {
-            $_SESSION['user_id'] = (string)$result->getInsertedId();
-            $_SESSION['user_name'] = $name;
-            header("Location: login.php");
-            exit();
+        // Cek email sudah terdaftar
+        $existingUser = $database->users->findOne(['email' => $email]);
+        
+        if ($existingUser) {
+            $error = "Email sudah terdaftar!";
         } else {
-            $error = "Gagal mendaftar. Silakan coba lagi.";
+            $result = $database->users->insertOne([
+                'name' => $name,
+                'email' => $email,
+                'password' => $password,
+                'created_at' => new MongoDB\BSON\UTCDateTime(),
+                'books' => []
+            ]);
+
+            if ($result->getInsertedCount() > 0) {
+                $_SESSION['user_id'] = (string)$result->getInsertedId();
+                $_SESSION['user_name'] = $name;
+                header("Location: login.php");
+                exit();
+            } else {
+                $error = "Gagal mendaftar. Silakan coba lagi.";
+            }
         }
+    } catch (Exception $e) {
+        $error = "Error: " . $e->getMessage();
     }
 }
 ?>
