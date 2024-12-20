@@ -12,7 +12,7 @@ Aplikasi web untuk melacak progress membaca buku menggunakan PHP dan MongoDB.
 
 ## Teknologi
 
-- PHP 8.2
+- PHP 8.1.10
 - MongoDB
 - HTML/CSS/JavaScript
 - Font Awesome

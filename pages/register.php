@@ -6,29 +6,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
         $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-        $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-
-        // Cek email sudah terdaftar
-        $existingUser = $database->users->findOne(['email' => $email]);
         
-        if ($existingUser) {
-            $error = "Email sudah terdaftar!";
+        // Validasi format Gmail
+        if (!preg_match('/@gmail\.com$/i', $email)) {
+            $error = "Mohon gunakan email Gmail!";
         } else {
-            $result = $database->users->insertOne([
-                'name' => $name,
-                'email' => $email,
-                'password' => $password,
-                'created_at' => new MongoDB\BSON\UTCDateTime(),
-                'books' => []
-            ]);
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-            if ($result->getInsertedCount() > 0) {
-                $_SESSION['user_id'] = (string)$result->getInsertedId();
-                $_SESSION['user_name'] = $name;
-                header("Location: login.php");
-                exit();
+            // Cek email sudah terdaftar
+            $existingUser = $database->users->findOne(['email' => $email]);
+            
+            if ($existingUser) {
+                $error = "Email sudah terdaftar!";
             } else {
-                $error = "Gagal mendaftar. Silakan coba lagi.";
+                $result = $database->users->insertOne([
+                    'name' => $name,
+                    'email' => $email,
+                    'password' => $password,
+                    'created_at' => new MongoDB\BSON\UTCDateTime(),
+                    'books' => []
+                ]);
+
+                if ($result->getInsertedCount() > 0) {
+                    $_SESSION['user_id'] = (string)$result->getInsertedId();
+                    $_SESSION['user_name'] = $name;
+                    header("Location: login.php");
+                    exit();
+                } else {
+                    $error = "Gagal mendaftar. Silakan coba lagi.";
+                }
             }
         }
     } catch (Exception $e) {
@@ -67,7 +73,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
+                    <input type="email" 
+                           id="email" 
+                           name="email" 
+                           pattern="[a-z0-9._%+-]+@gmail\.com$"
+                           title="Mohon gunakan email Gmail"
+                           required>
+                    <small>*Gunakan email Gmail</small>
                 </div>
 
                 <div class="form-group">

@@ -1,4 +1,9 @@
 .env
 vendor/
-uploads/
-.DS_Store 
+uploads/*
+!uploads/covers/
+!uploads/profiles/
+uploads/covers/*
+uploads/profiles/*
+.DS_Store
+node_modules/

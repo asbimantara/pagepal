@@ -1,8 +1,9 @@
 .books-header {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 0;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
 }
 
 .books-header:has(+ .books-container) {
@@ -14,17 +15,13 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  gap: 1rem;
+  padding: 0.5rem 0;
 }
 
 .books-header-top h1 {
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 600;
   margin: 0;
-  flex-shrink: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .books-header-right {
@@ -134,10 +131,13 @@
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
   margin-bottom: 2rem;
+  width: 100%;
 }
 
 .book-card {
   display: none;
+  width: 100%;
+  max-width: 100%;
 }
 
 .book-card.active {
@@ -155,6 +155,8 @@
   height: 100%;
   display: flex;
   flex-direction: column;
+  width: 100%;
+  max-width: 100%;
 }
 
 .book-content:hover {
@@ -167,6 +169,7 @@
   padding-top: 150%;
   overflow: hidden;
   background: #f5f5f5;
+  border-radius: 12px 12px 0 0;
 }
 
 .book-cover img {
@@ -176,6 +179,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .book-progress {
@@ -191,14 +195,19 @@
 }
 
 .book-info {
+  position: relative;
   padding: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  min-height: 180px;
 }
 
 .book-info h3 {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  right: 1.5rem;
   margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
@@ -211,6 +220,10 @@
 }
 
 .book-info .author {
+  position: absolute;
+  top: 5rem;
+  left: 1.5rem;
+  right: 1.5rem;
   color: #666;
   font-size: 0.95rem;
   margin: 0;
@@ -220,6 +233,9 @@
 }
 
 .status-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
   display: inline-block;
   padding: 0.4rem 0.8rem;
   border-radius: 20px;
@@ -227,6 +243,7 @@
   font-weight: 500;
   text-align: center;
   width: fit-content;
+  z-index: 1;
 }
 
 .status-badge.belum_mulai {
@@ -479,7 +496,9 @@
 /* Search and Filter Container */
 .search-and-filter {
   display: flex;
+  align-items: center;
   gap: 1rem;
+  width: 100%;
   margin-bottom: 2rem;
 }
 
@@ -517,4 +536,96 @@
   .form-actions button {
     width: 100%;
   }
+}
+
+/* Menambahkan styling untuk tombol modal */
+.modal .form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.modal .form-actions button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal .btn-secondary {
+  background: #f0f0f0;
+  color: #666;
+}
+
+.modal .btn-secondary:hover {
+  background: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.modal .btn-danger {
+  background: #dc3545;
+  color: white;
+}
+
+.modal .btn-danger:hover {
+  background: #c82333;
+  transform: translateY(-2px);
+}
+
+/* Memperbaiki responsive modal */
+@media (max-width: 768px) {
+  .modal .form-actions {
+    flex-direction: row; /* Mengubah dari column ke row */
+  }
+
+  .modal .form-actions button {
+    flex: 1;
+  }
+}
+
+.books-header-top .btn-primary {
+  background: var(--primary-color);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.books-header-top .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  background: #5952ff;
+}
+
+.books-header-top .btn-primary:active {
+  transform: translateY(0);
+}
+
+.books-header-top .btn-primary::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.2);
+  transform: scale(0);
+  transition: transform 0.3s ease;
+  border-radius: inherit;
+}
+
+.books-header-top .btn-primary:active::after {
+  transform: scale(2);
+  opacity: 0;
 }

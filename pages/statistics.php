@@ -15,8 +15,7 @@ $totalBooks = count($books);
 $booksCompleted = 0;
 $totalPages = 0;
 $pagesRead = 0;
-$averageRating = 0;
-$ratedBooks = 0;
+$booksInProgress = 0;
 
 foreach ($books as $book) {
     $totalPages += $book->total_pages;
@@ -24,15 +23,10 @@ foreach ($books as $book) {
     
     if ($book->status === 'selesai') {
         $booksCompleted++;
-    }
-    
-    if ($book->rating > 0) {
-        $averageRating += $book->rating;
-        $ratedBooks++;
+    } elseif ($book->status === 'sedang_dibaca') {
+        $booksInProgress++;
     }
 }
-
-$averageRating = $ratedBooks > 0 ? round($averageRating / $ratedBooks, 1) : 0;
 
 // Tambahkan setelah perhitungan statistik yang ada
 $achievement = '';
@@ -83,32 +77,21 @@ if ($booksCompleted <= 15) {
 
 // Tambahkan fungsi untuk menghitung progress
 function calculateProgress($booksCompleted) {
-    $levels = [
-        ['min' => 0, 'max' => 15, 'name' => 'Pembaca Pemula'],
-        ['min' => 16, 'max' => 40, 'name' => 'Pembaca Antusias'],
-        ['min' => 41, 'max' => 75, 'name' => 'Petualang Literasi'],
-        ['min' => 76, 'max' => 120, 'name' => 'Penjelajah Kata'],
-        ['min' => 121, 'max' => 175, 'name' => 'Cendekiawan Buku'],
-        ['min' => 176, 'max' => 250, 'name' => 'Sarjana Pustaka'],
-        ['min' => 251, 'max' => 350, 'name' => 'Guru Literasi'],
-        ['min' => 351, 'max' => 500, 'name' => 'Maestro Buku'],
-        ['min' => 501, 'max' => 750, 'name' => 'Filsuf Pustaka'],
-        ['min' => 751, 'max' => null, 'name' => 'Legenda Literasi']
-    ];
-
-    foreach ($levels as $index => $level) {
-        if ($level['max'] === null || $booksCompleted <= $level['max']) {
-            $currentMin = $level['min'];
-            $currentMax = $level['max'] ?? $level['min'];
-            
-            if ($level['max'] === null) {
-                return 100;
-            }
-
-            $range = $level['max'] - $level['min'];
-            $progress = (($booksCompleted - $level['min']) / $range) * 100;
-            return min(100, max(0, $progress));
-        }
+    // Level Pembaca Pemula (0-15 buku)
+    if ($booksCompleted <= 15) {
+        return ($booksCompleted / 15) * 100;
+    }
+    // Level Pembaca Antusias (16-40 buku)
+    else if ($booksCompleted <= 40) {
+        return (($booksCompleted - 15) / (40 - 15)) * 100;
+    }
+    // Level Petualang Literasi (41-75 buku)
+    else if ($booksCompleted <= 75) {
+        return (($booksCompleted - 40) / (75 - 40)) * 100;
+    }
+    // Level Penjelajah Kata (76-120 buku)
+    else if ($booksCompleted <= 120) {
+        return (($booksCompleted - 75) / (120 - 75)) * 100;
     }
     return 100;
 }
@@ -135,10 +118,10 @@ function calculateProgress($booksCompleted) {
                 <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stat-item">
-                        <i class="fas fa-book-open"></i>
+                        <i class="fas fa-book-reader"></i>
                         <div class="stat-info">
-                            <h3>Total Buku</h3>
-                            <p><?php echo $totalBooks; ?></p>
+                            <h3>Sedang Dibaca</h3>
+                            <p><?php echo $booksInProgress; ?></p>
                         </div>
                     </div>
 
@@ -159,10 +142,10 @@ function calculateProgress($booksCompleted) {
                     </div>
 
                     <div class="stat-item">
-                        <i class="fas fa-star"></i>
+                        <i class="fas fa-book-open"></i>
                         <div class="stat-info">
-                            <h3>Rating Rata-rata</h3>
-                            <p><?php echo $averageRating; ?> <span class="rating-max">/ 5</span></p>
+                            <h3>Total Buku</h3>
+                            <p><?php echo $totalBooks; ?></p>
                         </div>
                     </div>
                 </div>

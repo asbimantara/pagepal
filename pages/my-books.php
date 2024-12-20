@@ -31,7 +31,7 @@ $books = $user->books ?? [];
             <div class="books-header-top">
                 <h1>Koleksi Buku Saya</h1>
                 <a href="add-book.php" class="btn-primary">
-                    <i class="fas fa-plus"></i> Tambah Buku
+                    Tambah Buku
                 </a>
             </div>
         </div>
@@ -120,12 +120,16 @@ $books = $user->books ?? [];
     <div id="deleteModal" class="modal">
         <div class="modal-content">
             <h2>Konfirmasi Hapus</h2>
-            <p>Apakah Anda yakin ingin menghapus buku ini?</p>
+            <p>Apakah Anda yakin ingin menghapus buku ini dari koleksi Anda? Tindakan ini tidak dapat dibatalkan.</p>
             <form id="deleteForm" method="POST" action="delete-book.php">
                 <input type="hidden" name="index" id="deleteIndex">
                 <div class="form-actions">
-                    <button type="button" onclick="closeDeleteModal()" class="btn-secondary">Batal</button>
-                    <button type="submit" class="btn-danger">Hapus</button>
+                    <button type="button" onclick="closeDeleteModal()" class="btn-secondary">
+                        Batal
+                    </button>
+                    <button type="submit" class="btn-danger">
+                        Hapus
+                    </button>
                 </div>
             </form>
         </div>

@@ -19,8 +19,17 @@ if (!isset($user->books[$bookIndex])) {
 
 $book = $user->books[$bookIndex];
 
+// Tambahkan pengecekan jumlah catatan
+$maxNotes = 3;
+$currentNoteCount = isset($book->notes) ? count($book->notes) : 0;
+
 // Handle penambahan catatan baru
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
+    if ($currentNoteCount >= $maxNotes) {
+        header("Location: book-detail.php?index=" . $bookIndex . "&error=max_notes");
+        exit();
+    }
+
     $newNote = [
         'content' => filter_var($_POST['note'], FILTER_SANITIZE_STRING),
         'page' => intval($_POST['page']),
@@ -43,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($book->title); ?> - Book Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/book-detail.css">
 </head>
@@ -50,11 +60,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
     <?php include '../layouts/header.php'; ?>
 
     <div class="container">
+        <?php if (isset($_GET['cover_success'])): ?>
+            <div class="alert alert-success alert-dismissible">
+                <i class="fas fa-check-circle"></i>
+                Cover buku berhasil diperbarui!
+                <button type="button" class="close-alert" onclick="this.parentElement.remove();">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        <?php endif; ?>
+
+        <?php if (isset($_GET['cover_error'])): ?>
+            <div class="alert alert-error alert-dismissible">
+                <i class="fas fa-exclamation-circle"></i>
+                <?php echo htmlspecialchars($_GET['cover_error']); ?>
+                <button type="button" class="close-alert" onclick="this.parentElement.remove();">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        <?php endif; ?>
+
         <div class="book-detail">
             <div class="book-header">
-                <div class="book-cover">
+                <div class="book-cover" onclick="document.getElementById('coverInput').click()">
                     <img src="<?php echo htmlspecialchars($book->cover_url); ?>" 
                          alt="<?php echo htmlspecialchars($book->title); ?>">
+                    <div class="cover-edit-overlay">
+                        <button class="edit-cover-btn">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <input type="file" 
+                           id="coverInput" 
+                           accept="image/jpeg,image/png,image/jpg" 
+                           onchange="updateCover(this)" 
+                           style="display: none;">
                 </div>
                 <div class="book-info">
                     <h1><?php echo htmlspecialchars($book->title); ?></h1>
@@ -98,23 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                     <button onclick="window.location.href='update-progress.php?index=<?php echo $bookIndex; ?>'" class="btn-primary">
                         Update Progress
                     </button>
-
-                    <?php if ($book->current_page == $book->total_pages): ?>
-                        <div class="rating-section">
-                            <h3>Beri Rating</h3>
-                            <div class="rating-stars">
-                                <?php for($i = 1; $i <= 5; $i++): ?>
-                                    <button class="star-btn <?php echo ($book->rating >= $i) ? 'active' : ''; ?>" 
-                                            onclick="updateRating(<?php echo $i; ?>)">
-                                        <i class="fas fa-star"></i>
-                                    </button>
-                                <?php endfor; ?>
-                            </div>
-                            <?php if ($book->rating > 0): ?>
-                                <p class="rating-info">Rating Anda: <?php echo $book->rating; ?> dari 5</p>
-                            <?php endif; ?>
-                        </div>
-                    <?php endif; ?>
                 </div>
             </div>
 
@@ -145,6 +168,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                     </div>
                 <?php endif; ?>
 
+                <?php if (isset($_GET['error']) && $_GET['error'] === 'max_notes'): ?>
+                    <div class="alert alert-error">
+                        Anda telah mencapai batas maksimal 3 catatan. Silakan hapus catatan lama untuk menambah catatan baru.
+                    </div>
+                <?php endif; ?>
+
+                <div class="notes-counter">
+                    Catatan: <?php echo $currentNoteCount; ?>/<?php echo $maxNotes; ?>
+                </div>
+
+                <?php if ($currentNoteCount < $maxNotes): ?>
                 <form method="POST" class="note-form">
                     <div class="form-group">
                         <label for="note">Tambah Catatan Baru</label>
@@ -172,6 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                     </div>
                     <button type="submit" class="btn-primary">Simpan Catatan</button>
                 </form>
+                <?php else: ?>
+                <div class="max-notes-warning">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Anda telah mencapai batas maksimal catatan. Silakan hapus catatan yang ada untuk menambah catatan baru.</p>
+                </div>
+                <?php endif; ?>
 
                 <div class="notes-list">
                     <?php if (!empty($book->notes)): ?>
@@ -339,38 +379,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
         });
     });
 
-    function updateRating(rating) {
-        fetch('update-rating.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `book_index=<?php echo $bookIndex; ?>&rating=${rating}`
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                // Update tampilan rating
-                document.querySelectorAll('.star-btn').forEach((btn, index) => {
-                    if (index < rating) {
-                        btn.classList.add('active');
-                    } else {
-                        btn.classList.remove('active');
-                    }
-                });
-                
-                // Update atau tambahkan info rating
-                let ratingInfo = document.querySelector('.rating-info');
-                if (!ratingInfo) {
-                    ratingInfo = document.createElement('p');
-                    ratingInfo.className = 'rating-info';
-                    document.querySelector('.rating-stars').after(ratingInfo);
+    function updateCover(input) {
+        if (input.files && input.files[0]) {
+            const formData = new FormData();
+            formData.append('cover', input.files[0]);
+            formData.append('book_index', '<?php echo $bookIndex; ?>');
+
+            // Tampilkan loading state
+            const coverImg = input.parentElement.querySelector('img');
+            coverImg.style.opacity = '0.5';
+
+            fetch('update-cover.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Refresh gambar cover
+                    coverImg.src = data.cover_url + '?t=' + new Date().getTime();
+                    coverImg.style.opacity = '1';
+                    
+                    // Redirect dengan parameter success
+                    window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_success=1`;
+                } else {
+                    // Redirect dengan parameter error
+                    window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_error=${encodeURIComponent(data.message)}`;
                 }
-                ratingInfo.textContent = `Rating Anda: ${rating} dari 5`;
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_error=Terjadi kesalahan saat mengupdate cover`;
+            });
+        }
     }
+
+    // Otomatis hilangkan alert setelah beberapa detik
+    document.addEventListener('DOMContentLoaded', function() {
+        const alerts = document.querySelectorAll('.alert-dismissible');
+        alerts.forEach(alert => {
+            setTimeout(() => {
+                alert.style.opacity = '0';
+                setTimeout(() => alert.remove(), 300);
+            }, 5000);
+        });
+    });
     </script>
 
     <?php include '../layouts/footer.php'; ?>

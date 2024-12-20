@@ -62,13 +62,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-picture-container">
-                    <img src="<?php echo !empty($user->profile_picture) ? '../' . $user->profile_picture : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; ?>" 
+                    <img src="<?php echo !empty($user->profile_picture) ? '../' . str_replace('../', '', $user->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; ?>" 
                          alt="Profile Picture" 
                          class="profile-picture">
                     <label for="profile-upload" class="upload-icon">
                         <i class="fas fa-camera"></i>
                     </label>
-                    <input type="file" id="profile-upload" class="profile-upload" accept="image/*" style="display: none;">
+                    <input type="file" 
+                           id="profile-upload" 
+                           class="profile-upload" 
+                           accept="image/*" 
+                           onchange="updateProfilePicture(this)" 
+                           style="display: none;">
                 </div>
                 <h1><?php echo htmlspecialchars($user->name); ?></h1>
                 <p class="join-date">
@@ -124,12 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../layouts/footer.php'; ?>
     
     <script>
+        // Tambahkan event listener untuk input file
         document.getElementById('profile-upload').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
                 // Validasi tipe file
                 if (!file.type.startsWith('image/')) {
-                    alert('Mohon upload file gambar');
+                    showNotification('Mohon upload file gambar', 'error');
                     return;
                 }
                 
@@ -140,29 +146,62 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 reader.readAsDataURL(file);
                 
-                // Upload gambar
+                // Panggil fungsi update
+                updateProfilePicture(this);
+            }
+        });
+
+        function updateProfilePicture(input) {
+            if (input.files && input.files[0]) {
                 const formData = new FormData();
-                formData.append('profile_picture', file);
-                
+                formData.append('profile_picture', input.files[0]);
+
                 fetch('upload_profile.php', {
                     method: 'POST',
                     body: formData
                 })
                 .then(response => response.json())
                 .then(data => {
+                    console.log('Server response:', data);
                     if (data.success) {
-                        // Tampilkan pesan sukses jika perlu
-                        console.log('Foto profil berhasil diupload');
+                        const profileImg = document.querySelector('.profile-picture');
+                        profileImg.src = '../' + data.image_url;
+                        showNotification('Foto profil berhasil diperbarui');
                     } else {
-                        alert('Gagal mengupload foto profil');
+                        showNotification(data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('Terjadi kesalahan saat mengupload foto');
+                    showNotification('Terjadi kesalahan saat mengupdate foto profil', 'error');
                 });
             }
-        });
+        }
+
+        function showNotification(message, type = 'success') {
+            // Hapus notifikasi yang ada
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            // Buat notifikasi baru
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            
+            // Tambahkan ke body
+            document.body.appendChild(notification);
+
+            // Trigger animasi
+            setTimeout(() => notification.classList.add('show'), 10);
+
+            // Hapus notifikasi setelah 3 detik
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html> 

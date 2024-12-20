@@ -14,6 +14,7 @@ $baseUrl = $isInPagesDir ? '..' : '.';
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="<?php echo $baseUrl; ?>/assets/css/style.css">
+    <script src="<?php echo $baseUrl; ?>/assets/js/main.js" defer></script>
 </head>
 <body>
     <nav class="main-nav">
@@ -33,6 +34,5 @@ $baseUrl = $isInPagesDir ? '..' : '.';
             <i class="fas fa-bars"></i>
         </button>
     </nav>
-    <script src="<?php echo $baseUrl; ?>/assets/js/main.js"></script>
 </body>
 </html> 

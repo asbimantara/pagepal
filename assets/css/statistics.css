@@ -14,7 +14,7 @@
 }
 
 .statistics-card h1::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -10px;
   left: 50%;
@@ -234,10 +234,21 @@
   height: 8px;
   border-radius: 4px;
   overflow: hidden;
+  margin: 1rem 0;
 }
 
 .achievement-progress-bar {
   background: var(--primary-color);
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.achievement-progress:hover .achievement-progress-bar {
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--secondary-color)
+  );
 }
 
 .progress-text {
@@ -276,33 +287,33 @@
 
 /* Container Wrapper */
 .statistics-wrapper {
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 /* Stats Enhancements */
 .current-pages {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .rating-max {
-    font-size: 1rem;
-    opacity: 0.7;
+  font-size: 1rem;
+  opacity: 0.7;
 }
 
 /* Additional Responsive Adjustments */
 @media (max-width: 768px) {
-    .statistics-wrapper {
-        margin: 1rem auto;
-    }
+  .statistics-wrapper {
+    margin: 1rem auto;
+  }
 
-    .achievement-icon {
-        width: 60px;
-        height: 60px;
-    }
+  .achievement-icon {
+    width: 60px;
+    height: 60px;
+  }
 
-    .achievement-icon i {
-        font-size: 2rem;
-    }
+  .achievement-icon i {
+    font-size: 2rem;
+  }
 }

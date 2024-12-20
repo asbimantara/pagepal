@@ -1,12 +1,17 @@
 <?php
-session_start();
+require_once 'config/session.php';
+initSession();
+
+if (isset($_SESSION['user_id'])) {
+    checkSessionTimeout();
+}
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PagePal</title>
+    <title>PagePal - Your Reading Companion</title>
     <link rel="stylesheet" href="assets/css/landing.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
@@ -17,7 +22,11 @@ session_start();
             <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="PagePal Logo">
             <span>PagePal</span>
         </div>
-        <a href="pages/login.php" class="nav-cta">Masuk</a>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <a href="dashboard.php" class="nav-cta">Dashboard</a>
+        <?php else: ?>
+            <a href="pages/login.php" class="nav-cta">Masuk</a>
+        <?php endif; ?>
     </nav>
 
     <header class="hero">

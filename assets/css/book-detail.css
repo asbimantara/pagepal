@@ -9,22 +9,69 @@
 .book-header {
   display: flex;
   gap: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .book-cover {
-  flex-shrink: 0;
-  width: 250px;
-  height: 375px;
-  border-radius: 10px;
+  position: relative;
+  width: 300px;
+  height: 450px;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #f5f5f5;
+  cursor: pointer;
 }
 
 .book-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
+}
+
+.cover-edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.book-cover:hover .cover-edit-overlay {
+  opacity: 1;
+}
+
+.edit-cover-btn {
+  background: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.edit-cover-btn i {
+  color: var(--primary-color);
+  font-size: 1.5rem;
+}
+
+.edit-cover-btn:hover {
+  transform: scale(1.1);
+  background: var(--primary-color);
+}
+
+.edit-cover-btn:hover i {
+  color: white;
 }
 
 .book-info {
@@ -141,7 +188,7 @@
 .note-content-toggle {
   background: none;
   border: none;
-  color: #4CAF50;
+  color: #4caf50;
   cursor: pointer;
   padding: 5px 10px;
   font-size: 14px;
@@ -170,8 +217,8 @@
   }
 
   .book-cover {
-    width: 200px;
-    height: 300px;
+    width: 250px;
+    height: 375px;
   }
 
   .book-info {
@@ -195,394 +242,485 @@
 
 /* Menambahkan margin untuk button simpan catatan */
 .note-form button[type="submit"] {
-    width: 100%;
-    margin-top: 15px;  
+  width: 100%;
+  margin-top: 15px;
 }
 
 /* Atau alternatifnya, bisa menambahkan margin di input halaman */
 .note-form input[type="number"] {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .book-date {
-    color: #666;
-    font-size: 1rem;
-    margin: 0.5rem 0 1.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: #666;
+  font-size: 1rem;
+  margin: 0.5rem 0 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .book-date i {
-    color: var(--primary-color);
-    font-size: 1.1rem;
+  color: var(--primary-color);
+  font-size: 1.1rem;
 }
 
 /* Tambahkan style untuk note actions */
 .note-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    color: #666;
-    font-size: 0.9rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.9rem;
 }
 
 .note-actions {
-    display: flex;
-    gap: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .btn-icon {
-    background: none;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    color: #666;
-    transition: color 0.3s ease;
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
 }
 
 .btn-icon:hover {
-    color: #4CAF50;
+  color: #4caf50;
 }
 
 .btn-icon-danger:hover {
-    color: #dc3545;
+  color: #dc3545;
 }
 
 /* Modal styles untuk edit dan delete */
 .modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 .modal-content {
-    background: white;
-    border-radius: 10px;
-    padding: 2.5rem;
-    width: 90%;
-    max-width: 500px;
-    margin: 10vh auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  background: white;
+  border-radius: 10px;
+  padding: 2.5rem;
+  width: 90%;
+  max-width: 500px;
+  margin: 10vh auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 .modal-content h2 {
-    margin-bottom: 1.5rem;
-    color: var(--text-color);
-    font-size: 1.5rem;
-    text-align: center;
+  margin-bottom: 1.5rem;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  text-align: center;
 }
 
 .modal-content .form-group {
-    margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .modal-content label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: var(--text-color);
-    font-weight: 600;
-    font-size: 0.95rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  font-weight: 600;
+  font-size: 0.95rem;
 }
 
 .modal-content textarea {
-    width: 100%;
-    min-height: 120px;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    resize: vertical;
-    font-size: 1rem;
-    line-height: 1.5;
-    transition: all 0.3s ease;
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
 }
 
 .modal-content textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-    outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+  outline: none;
 }
 
 .modal-content input[type="number"] {
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .modal-content input[type="number"]:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-    outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+  outline: none;
 }
 
 .modal-content .form-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
 }
 
 .modal-content .btn-secondary,
 .modal-content .btn-primary,
 .modal-content .btn-danger {
-    flex: 1;
-    padding: 0.8rem;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    text-align: center;
-    transition: all 0.3s ease;
+  flex: 1;
+  padding: 0.8rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.3s ease;
 }
 
 .modal-content .btn-secondary {
-    background: #f5f5f5;
-    color: var(--text-color);
-    border: none;
+  background: #f5f5f5;
+  color: var(--text-color);
+  border: none;
 }
 
 .modal-content .btn-primary {
-    background: var(--primary-color);
-    color: white;
-    border: none;
+  background: var(--primary-color);
+  color: white;
+  border: none;
 }
 
 .modal-content .btn-danger {
-    background: #dc3545;
-    color: white;
-    border: none;
+  background: #dc3545;
+  color: white;
+  border: none;
 }
 
 .modal-content .btn-secondary:hover {
-    background: #e0e0e0;
-    transform: translateY(-2px);
+  background: #e0e0e0;
+  transform: translateY(-2px);
 }
 
 .modal-content .btn-primary:hover {
-    background: #5952ff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
+  background: #5952ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.2);
 }
 
 .modal-content .btn-danger:hover {
-    background: #c82333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
+  background: #c82333;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-    .modal-content {
-        padding: 1.5rem;
-        margin: 5vh auto;
-        width: 95%;
-    }
+  .modal-content {
+    padding: 1.5rem;
+    margin: 5vh auto;
+    width: 95%;
+  }
 
-    .modal-content h2 {
-        font-size: 1.3rem;
-        margin-bottom: 1rem;
-    }
+  .modal-content h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
 
-    .modal-content .form-actions {
-        flex-direction: column;
-        margin-top: 1.5rem;
-    }
+  .modal-content .form-actions {
+    flex-direction: column;
+    margin-top: 1.5rem;
+  }
 
-    .modal-content .btn-secondary,
-    .modal-content .btn-primary,
-    .modal-content .btn-danger {
-        width: 100%;
-        padding: 0.8rem;
-    }
+  .modal-content .btn-secondary,
+  .modal-content .btn-primary,
+  .modal-content .btn-danger {
+    width: 100%;
+    padding: 0.8rem;
+  }
 }
 
 /* Style untuk form tambah catatan */
 .note-form .form-group {
-    position: relative;
-    margin-bottom: 1.5rem;
+  position: relative;
+  margin-bottom: 1.5rem;
 }
 
 .note-form textarea {
-    width: 100%;
-    min-height: 120px;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    resize: vertical;
-    font-size: 1rem;
-    line-height: 1.5;
-    transition: all 0.3s ease;
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 1rem;
+  line-height: 1.5;
+  transition: all 0.3s ease;
 }
 
 .note-form textarea:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-    outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+  outline: none;
 }
 
 .character-count {
-    position: absolute;
-    right: 10px;
-    bottom: -20px;
-    font-size: 0.8rem;
-    color: #666;
+  position: absolute;
+  right: 10px;
+  bottom: -20px;
+  font-size: 0.8rem;
+  color: #666;
 }
 
 .page-input-container {
-    position: relative;
+  position: relative;
 }
 
 .page-input-container input {
-    width: 100%;
-    padding: 0.8rem;
-    padding-right: 100px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
+  width: 100%;
+  padding: 0.8rem;
+  padding-right: 100px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .page-input-container input:focus {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-    outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+  outline: none;
 }
 
 .page-info {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #666;
-    font-size: 0.9rem;
-    background: white;
-    padding: 0 5px;
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-size: 0.9rem;
+  background: white;
+  padding: 0 5px;
 }
 
 /* Style untuk placeholder */
 .note-form textarea::placeholder {
-    color: #999;
+  color: #999;
 }
 
 /* Responsive adjustments */
 @media (max-width: 480px) {
-    .note-form textarea {
-        min-height: 100px;
-    }
-    
-    .character-count {
-        bottom: -18px;
-        font-size: 0.75rem;
-    }
-    
-    .page-info {
-        font-size: 0.8rem;
-    }
+  .note-form textarea {
+    min-height: 100px;
+  }
+
+  .character-count {
+    bottom: -18px;
+    font-size: 0.75rem;
+  }
+
+  .page-info {
+    font-size: 0.8rem;
+  }
 }
 
 /* Button Styles */
 .btn-primary {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-    text-align: center;
-    display: inline-block;
-    margin: 10px 0;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+  text-align: center;
+  display: inline-block;
+  margin: 10px 0;
 }
 
 .btn-primary:hover {
-    background-color: #45a049;
+  background-color: #45a049;
 }
 
 .btn-icon {
-    background: none;
-    border: none;
-    padding: 5px;
-    cursor: pointer;
-    color: #666;
-    transition: color 0.3s ease;
+  background: none;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  color: #666;
+  transition: color 0.3s ease;
 }
 
 .btn-icon:hover {
-    color: #4CAF50;
+  color: #4caf50;
 }
 
 .btn-icon-danger:hover {
-    color: #dc3545;
+  color: #dc3545;
 }
 
 /* Rating Section Styles */
 .rating-section {
-    margin-top: 2rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #eee;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
 }
 
 .rating-section h3 {
-    font-size: 1.1rem;
-    color: var(--text-color);
-    margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
 }
 
 .rating-stars {
-    display: flex;
-    gap: 5px;
-    margin: 10px 0;
+  display: flex;
+  gap: 5px;
+  margin: 10px 0;
 }
 
 .star-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    color: #ddd;
-    transition: color 0.3s ease;
-    padding: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 24px;
+  color: #ddd;
+  transition: color 0.3s ease;
+  padding: 5px;
 }
 
 .star-btn:hover,
 .star-btn.active {
-    color: #ffd700;
+  color: #ffd700;
 }
 
 /* Form Submit Button */
 .note-form button[type="submit"] {
-    width: 100%;
-    margin-top: 15px;
+  width: 100%;
+  margin-top: 15px;
 }
 
 .rating-info {
-    color: #666;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
+  color: #666;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
 }
 
 .completion-info {
-    margin-top: 0.5rem;
-    color: var(--primary-color);
-    font-size: 0.9rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(108, 99, 255, 0.1);
-    padding: 0.8rem 1rem;
-    border-radius: 5px;
-    line-height: 1.4;
+  margin-top: 0.5rem;
+  color: var(--primary-color);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(108, 99, 255, 0.1);
+  padding: 0.8rem 1rem;
+  border-radius: 5px;
+  line-height: 1.4;
 }
 
 .completion-info i {
-    font-size: 1rem;
-    flex-shrink: 0;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.notes-counter {
+  background-color: #f8f9fa;
+  padding: 8px 12px;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.max-notes-warning {
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  color: #856404;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.max-notes-warning i {
+  font-size: 1.2rem;
+}
+
+.max-notes-warning p {
+  margin: 0;
+}
+
+.alert {
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+}
+
+/* Alert styles */
+.alert-dismissible {
+  position: relative;
+  padding-right: 4rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
+}
+
+.close-alert {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0.5rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.close-alert:hover {
+  opacity: 1;
+}
+
+/* Animasi untuk alert */
+@keyframes slideIn {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.alert {
+  animation: slideIn 0.3s ease forwards;
 }
