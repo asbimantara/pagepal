@@ -65,8 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-picture-container">
-                    <img src="<?php echo !empty($user->profile_picture) ? '../' . str_replace('../', '', $user->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; ?>"
-                        alt="Profile Picture" class="profile-picture">
+                    <img src="<?php
+                    $profilePic = $user->profile_picture ?? '';
+                    // Check if it's a full URL (Cloudinary) or relative path
+                    if (!empty($profilePic)) {
+                        if (strpos($profilePic, 'http') === 0) {
+                            echo htmlspecialchars($profilePic);
+                        } else {
+                            echo '../' . str_replace('../', '', $profilePic);
+                        }
+                    } else {
+                        echo 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png';
+                    }
+                    ?>" alt="Profile Picture" class="profile-picture">
                     <label for="profile-upload" class="upload-icon">
                         <i class="fas fa-camera"></i>
                     </label>
@@ -163,7 +174,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         console.log('Server response:', data);
                         if (data.success) {
                             const profileImg = document.querySelector('.profile-picture');
-                            profileImg.src = '../' + data.image_url;
+                            // Check if it's a full URL (Cloudinary) or relative path
+                            if (data.image_url.startsWith('http')) {
+                                profileImg.src = data.image_url;
+                            } else {
+                                profileImg.src = '../' + data.image_url;
+                            }
                             showNotification('Foto profil berhasil diperbarui');
                         } else {
                             showNotification(data.message, 'error');

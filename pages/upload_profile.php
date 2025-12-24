@@ -2,6 +2,7 @@
 ob_start();
 session_start();
 require_once '../config/database.php';
+require_once '../config/cloudinary.php';
 
 if (!isset($_SESSION['user_id'])) {
     echo json_encode(['success' => false, 'message' => 'Unauthorized']);
@@ -22,23 +23,18 @@ try {
         exit();
     }
 
-    $uploadDir = '../uploads/profiles/';
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    // Upload to Cloudinary
+    $uploadResult = uploadToCloudinary($file['tmp_name'], 'profiles');
 
-    $fileName = uniqid() . '_' . basename($file['name']);
-    $uploadPath = $uploadDir . $fileName;
-
-    if (move_uploaded_file($file['tmp_name'], $uploadPath)) {
-        $imageUrl = 'uploads/profiles/' . $fileName;
+    if ($uploadResult['success']) {
+        $imageUrl = $uploadResult['url'];
 
         $result = $database->users->updateOne(
             ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
             ['$set' => ['profile_picture' => $imageUrl]]
         );
 
-        if ($result->getModifiedCount() > 0) {
+        if ($result->getModifiedCount() > 0 || $result->getMatchedCount() > 0) {
             echo json_encode([
                 'success' => true,
                 'image_url' => $imageUrl,
@@ -48,12 +44,7 @@ try {
             echo json_encode(['success' => false, 'message' => 'Failed to update database']);
         }
     } else {
-        $uploadError = error_get_last();
-        echo json_encode([
-            'success' => false,
-            'message' => 'Gagal upload file: ' . $uploadError['message']
-        ]);
-        exit();
+        echo json_encode(['success' => false, 'message' => 'Failed to upload: ' . $uploadResult['error']]);
     }
 
 } catch (Exception $e) {
