@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -28,4 +29,4 @@ try {
     ]);
 } catch (Exception $e) {
     echo json_encode(['success' => false]);
-} 
+}

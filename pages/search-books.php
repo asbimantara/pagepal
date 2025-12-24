@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -10,7 +11,7 @@ $searchText = $_GET['query'];
 
 try {
     $userId = new MongoDB\BSON\ObjectId($_SESSION['user_id']);
-    
+
     $pipeline = [
         [
             '$match' => ['_id' => $userId]

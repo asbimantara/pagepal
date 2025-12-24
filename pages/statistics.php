@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -20,7 +21,7 @@ $booksInProgress = 0;
 foreach ($books as $book) {
     $totalPages += $book->total_pages;
     $pagesRead += $book->current_page;
-    
+
     if ($book->status === 'selesai') {
         $booksCompleted++;
     } elseif ($book->status === 'sedang_dibaca') {
@@ -76,7 +77,8 @@ if ($booksCompleted <= 15) {
 }
 
 // Tambahkan fungsi untuk menghitung progress
-function calculateProgress($booksCompleted) {
+function calculateProgress($booksCompleted)
+{
     // Level Pembaca Pemula (0-15 buku)
     if ($booksCompleted <= 15) {
         return ($booksCompleted / 15) * 100;
@@ -99,6 +101,7 @@ function calculateProgress($booksCompleted) {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -107,6 +110,7 @@ function calculateProgress($booksCompleted) {
     <link rel="stylesheet" href="../assets/css/statistics.css?v=<?php echo time(); ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 <body>
     <?php include '../layouts/header.php'; ?>
 
@@ -137,7 +141,8 @@ function calculateProgress($booksCompleted) {
                         <i class="fas fa-bookmark"></i>
                         <div class="stat-info">
                             <h3>Halaman Dibaca</h3>
-                            <p><span class="current-pages"><?php echo $pagesRead; ?></span> / <?php echo $totalPages; ?></p>
+                            <p><span class="current-pages"><?php echo $pagesRead; ?></span> / <?php echo $totalPages; ?>
+                            </p>
                         </div>
                     </div>
 
@@ -162,12 +167,15 @@ function calculateProgress($booksCompleted) {
                             <p class="achievement-title"><?php echo $achievement; ?></p>
                             <?php if ($nextLevel): ?>
                                 <p class="achievement-next">
-                                    <span class="books-remaining"><?php echo $booksToNext; ?></span> buku lagi untuk mencapai level <?php echo $nextLevel; ?>
+                                    <span class="books-remaining"><?php echo $booksToNext; ?></span> buku lagi untuk
+                                    mencapai level <?php echo $nextLevel; ?>
                                 </p>
                                 <div class="achievement-progress">
-                                    <div class="achievement-progress-bar" style="width: <?php echo calculateProgress($booksCompleted); ?>%"></div>
+                                    <div class="achievement-progress-bar"
+                                        style="width: <?php echo calculateProgress($booksCompleted); ?>%"></div>
                                 </div>
-                                <p class="progress-text"><?php echo round(calculateProgress($booksCompleted)); ?>% menuju level berikutnya</p>
+                                <p class="progress-text"><?php echo round(calculateProgress($booksCompleted)); ?>% menuju
+                                    level berikutnya</p>
                             <?php else: ?>
                                 <p class="achievement-next">Selamat! Kamu sudah mencapai level tertinggi! 🎉</p>
                             <?php endif; ?>
@@ -185,56 +193,64 @@ function calculateProgress($booksCompleted) {
                                 </div>
                                 <span class="level-books">0-15 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 15 && $booksCompleted <= 40 ? 'current' : ($booksCompleted > 40 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 15 && $booksCompleted <= 40 ? 'current' : ($booksCompleted > 40 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-book-reader"></i>
                                     <span class="level-name">Pembaca Antusias</span>
                                 </div>
                                 <span class="level-books">16-40 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 40 && $booksCompleted <= 75 ? 'current' : ($booksCompleted > 75 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 40 && $booksCompleted <= 75 ? 'current' : ($booksCompleted > 75 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-compass"></i>
                                     <span class="level-name">Petualang Literasi</span>
                                 </div>
                                 <span class="level-books">41-75 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 75 && $booksCompleted <= 120 ? 'current' : ($booksCompleted > 120 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 75 && $booksCompleted <= 120 ? 'current' : ($booksCompleted > 120 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-feather-alt"></i>
                                     <span class="level-name">Penjelajah Kata</span>
                                 </div>
                                 <span class="level-books">76-120 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 120 && $booksCompleted <= 175 ? 'current' : ($booksCompleted > 175 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 120 && $booksCompleted <= 175 ? 'current' : ($booksCompleted > 175 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-graduation-cap"></i>
                                     <span class="level-name">Cendekiawan Buku</span>
                                 </div>
                                 <span class="level-books">121-175 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 175 && $booksCompleted <= 250 ? 'current' : ($booksCompleted > 250 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 175 && $booksCompleted <= 250 ? 'current' : ($booksCompleted > 250 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-university"></i>
                                     <span class="level-name">Sarjana Pustaka</span>
                                 </div>
                                 <span class="level-books">176-250 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 250 && $booksCompleted <= 350 ? 'current' : ($booksCompleted > 350 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 250 && $booksCompleted <= 350 ? 'current' : ($booksCompleted > 350 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-chalkboard-teacher"></i>
                                     <span class="level-name">Guru Literasi</span>
                                 </div>
                                 <span class="level-books">251-350 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 350 && $booksCompleted <= 500 ? 'current' : ($booksCompleted > 500 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 350 && $booksCompleted <= 500 ? 'current' : ($booksCompleted > 500 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-crown"></i>
                                     <span class="level-name">Maestro Buku</span>
                                 </div>
                                 <span class="level-books">351-500 buku</span>
                             </div>
-                            <div class="level-item <?php echo $booksCompleted > 500 && $booksCompleted <= 750 ? 'current' : ($booksCompleted > 750 ? 'completed' : ''); ?>">
+                            <div
+                                class="level-item <?php echo $booksCompleted > 500 && $booksCompleted <= 750 ? 'current' : ($booksCompleted > 750 ? 'completed' : ''); ?>">
                                 <div class="level-info">
                                     <i class="fas fa-brain"></i>
                                     <span class="level-name">Filsuf Pustaka</span>
@@ -257,4 +273,5 @@ function calculateProgress($booksCompleted) {
 
     <?php include '../layouts/footer.php'; ?>
 </body>
-</html> 
+
+</html>

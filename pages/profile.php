@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -46,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/profile.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
+
 <body>
     <?php include '../layouts/header.php'; ?>
 
@@ -62,18 +65,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="profile-card">
             <div class="profile-header">
                 <div class="profile-picture-container">
-                    <img src="<?php echo !empty($user->profile_picture) ? '../' . str_replace('../', '', $user->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; ?>" 
-                         alt="Profile Picture" 
-                         class="profile-picture">
+                    <img src="<?php echo !empty($user->profile_picture) ? '../' . str_replace('../', '', $user->profile_picture) : 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'; ?>"
+                        alt="Profile Picture" class="profile-picture">
                     <label for="profile-upload" class="upload-icon">
                         <i class="fas fa-camera"></i>
                     </label>
-                    <input type="file" 
-                           id="profile-upload" 
-                           class="profile-upload" 
-                           accept="image/*" 
-                           onchange="updateProfilePicture(this)" 
-                           style="display: none;">
+                    <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
+                        onchange="updateProfilePicture(this)" style="display: none;">
                 </div>
                 <h1><?php echo htmlspecialchars($user->name); ?></h1>
                 <p class="join-date">
@@ -93,14 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" class="profile-form" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" 
-                           value="<?php echo htmlspecialchars($user->name); ?>" required>
+                    <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($user->name); ?>"
+                        required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" 
-                           value="<?php echo htmlspecialchars($user->email); ?>" required>
+                    <input type="email" id="email" name="email" value="<?php echo htmlspecialchars($user->email); ?>"
+                        required>
                 </div>
 
                 <div class="password-section">
@@ -127,10 +125,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <?php include '../layouts/footer.php'; ?>
-    
+
     <script>
         // Tambahkan event listener untuk input file
-        document.getElementById('profile-upload').addEventListener('change', function(e) {
+        document.getElementById('profile-upload').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
                 // Validasi tipe file
@@ -138,14 +136,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     showNotification('Mohon upload file gambar', 'error');
                     return;
                 }
-                
+
                 // Preview gambar
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = function (e) {
                     document.querySelector('.profile-picture').src = e.target.result;
                 }
                 reader.readAsDataURL(file);
-                
+
                 // Panggil fungsi update
                 updateProfilePicture(this);
             }
@@ -160,21 +158,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     method: 'POST',
                     body: formData
                 })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Server response:', data);
-                    if (data.success) {
-                        const profileImg = document.querySelector('.profile-picture');
-                        profileImg.src = '../' + data.image_url;
-                        showNotification('Foto profil berhasil diperbarui');
-                    } else {
-                        showNotification(data.message, 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    showNotification('Terjadi kesalahan saat mengupdate foto profil', 'error');
-                });
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Server response:', data);
+                        if (data.success) {
+                            const profileImg = document.querySelector('.profile-picture');
+                            profileImg.src = '../' + data.image_url;
+                            showNotification('Foto profil berhasil diperbarui');
+                        } else {
+                            showNotification(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        showNotification('Terjadi kesalahan saat mengupdate foto profil', 'error');
+                    });
             }
         }
 
@@ -189,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.textContent = message;
-            
+
             // Tambahkan ke body
             document.body.appendChild(notification);
 
@@ -204,4 +202,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </script>
 </body>
-</html> 
+
+</html>

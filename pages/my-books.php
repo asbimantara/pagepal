@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -14,6 +15,7 @@ $books = $user->books ?? [];
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,6 +25,7 @@ $books = $user->books ?? [];
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="../assets/js/books.js" defer></script>
 </head>
+
 <body>
     <?php include '../layouts/header.php'; ?>
 
@@ -75,10 +78,10 @@ $books = $user->books ?? [];
                         <div class="book-card active" data-status="<?php echo htmlspecialchars($book->status); ?>">
                             <div class="book-content">
                                 <div class="book-cover">
-                                    <img src="<?php echo htmlspecialchars($book->cover_url); ?>" 
-                                         alt="<?php echo htmlspecialchars($book->title); ?>">
+                                    <img src="<?php echo htmlspecialchars($book->cover_url); ?>"
+                                        alt="<?php echo htmlspecialchars($book->title); ?>">
                                     <div class="book-progress">
-                                        <?php 
+                                        <?php
                                         $progress = ($book->current_page / $book->total_pages) * 100;
                                         echo round($progress) . '%';
                                         ?>
@@ -88,7 +91,7 @@ $books = $user->books ?? [];
                                     <h3><?php echo htmlspecialchars($book->title); ?></h3>
                                     <p class="author"><?php echo htmlspecialchars($book->author); ?></p>
                                     <div class="status-badge <?php echo $book->status; ?>">
-                                        <?php 
+                                        <?php
                                         $status_text = [
                                             'belum_mulai' => 'Belum Mulai',
                                             'sedang_dibaca' => 'Sedang Dibaca',
@@ -136,42 +139,43 @@ $books = $user->books ?? [];
     </div>
 
     <script>
-    function searchBooks() {
-        const searchText = document.getElementById('searchBook').value.toLowerCase();
-        const bookCards = document.querySelectorAll('.book-card');
-        
-        bookCards.forEach(card => {
-            const title = card.querySelector('h3').textContent.toLowerCase();
-            const author = card.querySelector('.author').textContent.toLowerCase();
-            const status = card.querySelector('.status-badge').textContent.toLowerCase();
-            
-            if (title.includes(searchText) || 
-                author.includes(searchText) || 
-                status.includes(searchText)) {
-                card.style.display = '';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-    }
+        function searchBooks() {
+            const searchText = document.getElementById('searchBook').value.toLowerCase();
+            const bookCards = document.querySelectorAll('.book-card');
 
-    const deleteModal = document.getElementById('deleteModal');
-    
-    function deleteBook(index) {
-        document.getElementById('deleteIndex').value = index;
-        deleteModal.style.display = 'block';
-    }
-    
-    function closeDeleteModal() {
-        deleteModal.style.display = 'none';
-    }
-    
-    // Tutup modal jika user klik di luar modal
-    window.onclick = function(event) {
-        if (event.target == deleteModal) {
-            closeDeleteModal();
+            bookCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const author = card.querySelector('.author').textContent.toLowerCase();
+                const status = card.querySelector('.status-badge').textContent.toLowerCase();
+
+                if (title.includes(searchText) ||
+                    author.includes(searchText) ||
+                    status.includes(searchText)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
         }
-    }
+
+        const deleteModal = document.getElementById('deleteModal');
+
+        function deleteBook(index) {
+            document.getElementById('deleteIndex').value = index;
+            deleteModal.style.display = 'block';
+        }
+
+        function closeDeleteModal() {
+            deleteModal.style.display = 'none';
+        }
+
+        // Tutup modal jika user klik di luar modal
+        window.onclick = function (event) {
+            if (event.target == deleteModal) {
+                closeDeleteModal();
+            }
+        }
     </script>
 </body>
+
 </html>

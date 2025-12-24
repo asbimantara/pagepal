@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -6,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $name = htmlspecialchars($_POST['name'], ENT_QUOTES, 'UTF-8');
         $email = htmlspecialchars($_POST['email'], ENT_QUOTES, 'UTF-8');
-        
+
         // Validasi format Gmail
         if (!preg_match('/@gmail\.com$/i', $email)) {
             $error = "Mohon gunakan email Gmail!";
@@ -15,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Cek email sudah terdaftar
             $existingUser = $database->users->findOne(['email' => $email]);
-            
+
             if ($existingUser) {
                 $error = "Email sudah terdaftar!";
             } else {
@@ -28,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ]);
 
                 if ($result->getInsertedCount() > 0) {
-                    $_SESSION['user_id'] = (string)$result->getInsertedId();
+                    $_SESSION['user_id'] = (string) $result->getInsertedId();
                     $_SESSION['user_name'] = $name;
                     header("Location: login.php");
                     exit();
@@ -45,19 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daftar - PagePal</title>
     <link rel="stylesheet" href="../assets/css/auth.css">
 </head>
+
 <body>
     <div class="auth-container">
         <div class="auth-card">
             <div class="auth-header">
-                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" 
-                     alt="PagePal Logo" 
-                     class="auth-logo">
+                <img src="https://cdn-icons-png.flaticon.com/512/2232/2232688.png" alt="PagePal Logo" class="auth-logo">
                 <h1>Daftar PagePal</h1>
             </div>
 
@@ -73,12 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           pattern="[a-z0-9._%+-]+@gmail\.com$"
-                           title="Mohon gunakan email Gmail"
-                           required>
+                    <input type="email" id="email" name="email" pattern="[a-z0-9._%+-]+@gmail\.com$"
+                        title="Mohon gunakan email Gmail" required>
                     <small>*Gunakan email Gmail</small>
                 </div>
 
@@ -98,4 +95,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </body>
-</html> 
+
+</html>

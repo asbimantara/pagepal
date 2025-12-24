@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -24,11 +25,13 @@ try {
     $updatePath = "books.$bookIndex.notes.$noteIndex";
     $result = $database->users->updateOne(
         ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
-        ['$set' => [
-            "$updatePath.content" => $content,
-            "$updatePath.page" => $page,
-            "$updatePath.updated_at" => new MongoDB\BSON\UTCDateTime()
-        ]]
+        [
+            '$set' => [
+                "$updatePath.content" => $content,
+                "$updatePath.page" => $page,
+                "$updatePath.updated_at" => new MongoDB\BSON\UTCDateTime()
+            ]
+        ]
     );
 
     if ($result->getModifiedCount() > 0) {

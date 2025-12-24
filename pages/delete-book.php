@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -15,7 +16,7 @@ try {
         ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
         ['$unset' => ["books.{$bookIndex}" => 1]]
     );
-    
+
     // Reindex array untuk menghilangkan gap
     $database->users->updateOne(
         ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
@@ -26,4 +27,4 @@ try {
 } catch (Exception $e) {
     header("Location: my-books.php?error=delete_failed");
 }
-exit(); 
+exit();

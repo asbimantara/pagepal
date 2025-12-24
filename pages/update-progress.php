@@ -1,4 +1,5 @@
 <?php
+ob_start();
 session_start();
 require_once '../config/database.php';
 
@@ -21,7 +22,7 @@ $book = $user->books[$bookIndex];
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $currentPage = intval($_POST['current_page']);
-    
+
     // Cek apakah ini adalah konfirmasi dari warning
     if (isset($_POST['confirm']) && $_POST['confirm'] === 'true') {
         // Proses update langsung karena sudah dikonfirmasi
@@ -36,11 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $result = $database->users->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
-                ['$set' => [
-                    "books.$bookIndex.current_page" => $currentPage,
-                    "books.$bookIndex.status" => $status,
-                    "books.$bookIndex.last_read" => new MongoDB\BSON\UTCDateTime()
-                ]]
+                [
+                    '$set' => [
+                        "books.$bookIndex.current_page" => $currentPage,
+                        "books.$bookIndex.status" => $status,
+                        "books.$bookIndex.last_read" => new MongoDB\BSON\UTCDateTime()
+                    ]
+                ]
             );
 
             header("Location: book-detail.php?index=" . $bookIndex);
@@ -48,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Exception $e) {
             $error = "Gagal mengupdate progress";
         }
-    } 
+    }
     // Jika bukan konfirmasi, cek apakah perlu warning
     else if ($currentPage < $book->current_page) {
         $error = "Perhatian: Halaman yang Anda masukkan (" . $currentPage . ") lebih kecil dari progress sebelumnya (" . $book->current_page . "). 
@@ -66,11 +69,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $result = $database->users->updateOne(
                 ['_id' => new MongoDB\BSON\ObjectId($_SESSION['user_id'])],
-                ['$set' => [
-                    "books.$bookIndex.current_page" => $currentPage,
-                    "books.$bookIndex.status" => $status,
-                    "books.$bookIndex.last_read" => new MongoDB\BSON\UTCDateTime()
-                ]]
+                [
+                    '$set' => [
+                        "books.$bookIndex.current_page" => $currentPage,
+                        "books.$bookIndex.status" => $status,
+                        "books.$bookIndex.last_read" => new MongoDB\BSON\UTCDateTime()
+                    ]
+                ]
             );
 
             header("Location: book-detail.php?index=" . $bookIndex);
@@ -86,6 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -93,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/form.css">
 </head>
+
 <body>
     <?php include '../layouts/header.php'; ?>
 
@@ -122,17 +129,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-group">
                         <label for="current_page">Halaman Saat Ini</label>
                         <div class="progress-container">
-                            <input type="number" 
-                                   id="current_page" 
-                                   name="current_page" 
-                                   required 
-                                   min="0" 
-                                   max="<?php echo $book->total_pages; ?>"
-                                   value="<?php echo $book->current_page; ?>"
-                                   oninput="validateProgress(this)">
+                            <input type="number" id="current_page" name="current_page" required min="0"
+                                max="<?php echo $book->total_pages; ?>" value="<?php echo $book->current_page; ?>"
+                                oninput="validateProgress(this)">
                             <small class="form-text">dari <?php echo $book->total_pages; ?> halaman</small>
                         </div>
-                        <small class="form-text text-info">Progress terakhir: Halaman <?php echo $book->current_page; ?></small>
+                        <small class="form-text text-info">Progress terakhir: Halaman
+                            <?php echo $book->current_page; ?></small>
                     </div>
 
                     <div class="form-actions">
@@ -147,41 +150,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../layouts/footer.php'; ?>
 
     <script>
-    function validateProgress(input) {
-        const max = parseInt(input.getAttribute('max'));
-        const value = input.value;
-        
-        // Hapus karakter non-digit
-        input.value = value.replace(/[^\d]/g, '');
-        
-        // Batasi panjang input sesuai dengan max
-        if (parseInt(value) > max) {
-            input.value = max;
-        }
-        
-        // Mencegah input negatif
-        if (parseInt(value) < 0) {
-            input.value = 0;
-        }
-    }
+        function validateProgress(input) {
+            const max = parseInt(input.getAttribute('max'));
+            const value = input.value;
 
-    // Mencegah input karakter e, E, +, -
-    document.getElementById('current_page').addEventListener('keydown', function(e) {
-        if (['e', 'E', '+', '-'].includes(e.key)) {
+            // Hapus karakter non-digit
+            input.value = value.replace(/[^\d]/g, '');
+
+            // Batasi panjang input sesuai dengan max
+            if (parseInt(value) > max) {
+                input.value = max;
+            }
+
+            // Mencegah input negatif
+            if (parseInt(value) < 0) {
+                input.value = 0;
+            }
+        }
+
+        // Mencegah input karakter e, E, +, -
+        document.getElementById('current_page').addEventListener('keydown', function (e) {
+            if (['e', 'E', '+', '-'].includes(e.key)) {
+                e.preventDefault();
+            }
+        });
+
+        // Mencegah paste teks yang tidak valid
+        document.getElementById('current_page').addEventListener('paste', function (e) {
             e.preventDefault();
-        }
-    });
-
-    // Mencegah paste teks yang tidak valid
-    document.getElementById('current_page').addEventListener('paste', function(e) {
-        e.preventDefault();
-        const pastedText = (e.clipboardData || window.clipboardData).getData('text');
-        if (/^\d+$/.test(pastedText)) {
-            const value = parseInt(pastedText);
-            const max = parseInt(this.getAttribute('max'));
-            this.value = Math.min(value, max);
-        }
-    });
+            const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+            if (/^\d+$/.test(pastedText)) {
+                const value = parseInt(pastedText);
+                const max = parseInt(this.getAttribute('max'));
+                this.value = Math.min(value, max);
+            }
+        });
     </script>
 </body>
-</html> 
+
+</html>
