@@ -14,10 +14,13 @@ function checkSessionTimeout() {
 
 // Pengaturan session lifetime
 function initSession() {
-    if (session_status() === PHP_SESSION_NONE) {
+    if (session_status() === PHP_SESSION_NONE && !headers_sent()) {
         ini_set('session.gc_maxlifetime', 1800); // 30 menit
         session_set_cookie_params(1800); // 30 menit
         session_start();
+    } elseif (session_status() === PHP_SESSION_NONE) {
+        // Headers already sent, just start session without ini settings
+        @session_start();
     }
 }
 ?> 
