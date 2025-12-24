@@ -24,7 +24,7 @@ WORKDIR /var/www/html
 COPY . .
 
 # Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer update mongodb/mongodb --no-dev && composer install --no-dev --optimize-autoloader
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
