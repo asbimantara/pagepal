@@ -349,7 +349,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <li>Rasio 2:3 (format buku standar)</li>
                                 <li>Minimal 400x600 pixel</li>
                                 <li>Format JPG, PNG, atau WEBP</li>
-                                <li>Maksimal 2MB</li>
+                                <li>Maksimal 5MB</li>
                             </ul>
                         </div>
                         <label for="cover_file" class="upload-label" id="dropZone">
@@ -415,6 +415,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const preview = document.getElementById('preview-img');
 
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Validasi ukuran file (max 5MB)
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (file.size > maxSize) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    alert(`File terlalu besar (${sizeMB}MB). Maksimal 5MB!\n\nSilahkan kompres gambar terlebih dahulu.`);
+                    input.value = '';
+                    return;
+                }
+
+                // Validasi tipe file
+                if (!file.type.startsWith('image/')) {
+                    alert('Mohon upload file gambar (JPG, PNG, WEBP)');
+                    input.value = '';
+                    return;
+                }
+
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
@@ -423,7 +441,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     document.getElementById('cover_url').value = e.target.result;
                 }
 
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(file);
             }
         }
 

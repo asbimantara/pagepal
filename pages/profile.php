@@ -83,6 +83,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
                         onchange="updateProfilePicture(this)" style="display: none;">
+                    <small style="display: block; text-align: center; color: #666; margin-top: 8px;">
+                        <i class="fas fa-info-circle"></i> Maksimal 5MB (JPG, PNG)
+                    </small>
                 </div>
                 <h1><?php echo htmlspecialchars($user->name); ?></h1>
                 <p class="join-date">
@@ -145,6 +148,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Validasi tipe file
                 if (!file.type.startsWith('image/')) {
                     showNotification('Mohon upload file gambar', 'error');
+                    this.value = '';
+                    return;
+                }
+
+                // Validasi ukuran file (max 5MB)
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (file.size > maxSize) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    showNotification(`File terlalu besar (${sizeMB}MB). Maksimal 5MB!`, 'error');
+                    this.value = '';
                     return;
                 }
 
