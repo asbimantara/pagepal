@@ -95,6 +95,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                     </div>
                     <input type="file" id="coverInput" accept="image/jpeg,image/png,image/jpg"
                         onchange="updateCover(this)" style="display: none;">
+                    <small style="display: block; text-align: center; color: #666; margin-top: 8px; font-size: 0.8rem;">
+                        <i class="fas fa-info-circle"></i> Klik untuk ganti cover (Maks. 5MB)
+                    </small>
                 </div>
                 <div class="book-info">
                     <h1><?php echo htmlspecialchars($book->title); ?></h1>
@@ -376,8 +379,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
 
         function updateCover(input) {
             if (input.files && input.files[0]) {
+                const file = input.files[0];
+
+                // Validasi ukuran file (max 5MB)
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (file.size > maxSize) {
+                    const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+                    alert(`File terlalu besar (${sizeMB}MB). Maksimal 5MB!\n\nSilahkan kompres gambar terlebih dahulu.`);
+                    input.value = '';
+                    return;
+                }
+
+                // Validasi tipe file
+                if (!file.type.startsWith('image/')) {
+                    alert('Mohon upload file gambar (JPG, PNG)');
+                    input.value = '';
+                    return;
+                }
+
                 const formData = new FormData();
-                formData.append('cover', input.files[0]);
+                formData.append('cover', file);
                 formData.append('book_index', '<?php echo $bookIndex; ?>');
 
                 // Tampilkan loading state
@@ -399,11 +420,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                             window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_success=1`;
                         } else {
                             // Redirect dengan parameter error
+                            coverImg.style.opacity = '1';
                             window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_error=${encodeURIComponent(data.message)}`;
                         }
                     })
                     .catch(error => {
                         console.error('Error:', error);
+                        coverImg.style.opacity = '1';
                         window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_error=Terjadi kesalahan saat mengupdate cover`;
                     });
             }
