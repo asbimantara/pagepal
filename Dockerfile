@@ -23,8 +23,8 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
-# Install PHP dependencies
-RUN composer update mongodb/mongodb --no-dev && composer install --no-dev --optimize-autoloader
+# Install PHP dependencies (remove lock file to avoid version conflicts)
+RUN rm -f composer.lock && composer install --no-dev --optimize-autoloader
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
