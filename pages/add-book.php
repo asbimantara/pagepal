@@ -11,24 +11,28 @@ if (!isset($_SESSION['user_id'])) {
 // Array URL gambar default untuk sampul buku
 $defaultBookCovers = [
     [
-        'url' => 'https://cdn-icons-png.flaticon.com/512/3389/3389081.png',
-        'label' => 'Gambar 1'
+        'url' => '../assets/images/covers/1.png',
+        'label' => 'Cover 1'
     ],
     [
-        'url' => 'https://cdn-icons-png.flaticon.com/512/2702/2702154.png',
-        'label' => 'Gambar 2'
+        'url' => '../assets/images/covers/2.png',
+        'label' => 'Cover 2'
     ],
     [
-        'url' => 'https://cdn-icons-png.flaticon.com/512/3330/3330314.png',
-        'label' => 'Gambar 3'
+        'url' => '../assets/images/covers/3.png',
+        'label' => 'Cover 3'
     ],
     [
-        'url' => 'https://cdn-icons-png.flaticon.com/512/3145/3145765.png',
-        'label' => 'Gambar 4'
+        'url' => '../assets/images/covers/4.png',
+        'label' => 'Cover 4'
     ],
     [
-        'url' => 'https://cdn-icons-png.flaticon.com/512/3771/3771417.png',
-        'label' => 'Gambar 5'
+        'url' => '../assets/images/covers/5.png',
+        'label' => 'Cover 5'
+    ],
+    [
+        'url' => '../assets/images/covers/6.png',
+        'label' => 'Cover 6'
     ]
 ];
 
