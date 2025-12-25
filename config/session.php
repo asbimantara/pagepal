@@ -7,10 +7,13 @@ function initSession()
         ob_start();
     }
 
+    // Only configure and start session if not already started
     if (session_status() === PHP_SESSION_NONE) {
-        // Set session settings before starting
-        ini_set('session.gc_maxlifetime', 1800); // 30 menit
-        session_set_cookie_params(1800); // 30 menit
+        // Check if headers have NOT been sent before setting ini
+        if (!headers_sent()) {
+            ini_set('session.gc_maxlifetime', 1800); // 30 menit
+            session_set_cookie_params(1800); // 30 menit
+        }
         session_start();
     }
 }
