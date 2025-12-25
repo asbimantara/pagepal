@@ -95,33 +95,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
 
         <div class="book-detail">
             <div class="book-header">
-                <div class="book-cover-section">
-                    <div class="current-cover">
+                <div class="book-cover-wrapper">
+                    <!-- Cover Image Container with Fixed Size -->
+                    <div class="book-cover">
                         <img src="<?php echo htmlspecialchars($book->cover_url); ?>"
                             alt="<?php echo htmlspecialchars($book->title); ?>" id="currentCoverImg">
                     </div>
-
+                    
                     <!-- Cover Change Options -->
-                    <div class="cover-change-options" style="margin-top: 15px;">
-                        <p style="text-align: center; font-weight: bold; margin-bottom: 10px; color: #333;">
+                    <div class="cover-change-options" style="margin-top: 15px; text-align: center;">
+                        <p style="font-weight: bold; margin-bottom: 10px; color: #333; font-size: 0.9rem;">
                             <i class="fas fa-edit"></i> Ganti Sampul Buku
                         </p>
-                        <div class="cover-btn-group"
-                            style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-                            <button type="button" class="btn-change-cover" onclick="openCoverModal()"
-                                style="background: #6c63ff; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                        <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button type="button" onclick="openCoverModal()"
+                                style="background: #6c63ff; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
                                 <i class="fas fa-images"></i> Pilih Default
                             </button>
-                            <button type="button" class="btn-change-cover"
-                                onclick="document.getElementById('coverInput').click()"
-                                style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                            <button type="button" onclick="document.getElementById('coverInput').click()"
+                                style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.85rem;">
                                 <i class="fas fa-upload"></i> Upload Foto
                             </button>
                         </div>
                         <input type="file" id="coverInput" accept="image/jpeg,image/png,image/jpg"
                             onchange="updateCover(this)" style="display: none;">
-                        <small
-                            style="display: block; text-align: center; color: #888; margin-top: 10px; font-size: 0.75rem;">
+                        <small style="display: block; color: #888; margin-top: 10px; font-size: 0.75rem;">
                             <i class="fas fa-info-circle"></i> Maksimal 5MB (JPG, PNG)
                         </small>
                     </div>
