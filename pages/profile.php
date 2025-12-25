@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <i class="fas fa-camera"></i>
                     </label>
                     <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
-                        onchange="updateProfilePicture(this)" style="display: none;">
+                        style="display: none;">
                     <small style="display: block; text-align: center; color: #666; margin-top: 8px;">
                         <i class="fas fa-info-circle"></i> Maksimal 5MB (JPG, PNG)
                     </small>
@@ -157,52 +157,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (file.size > maxSize) {
                     const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
                     showNotification(`File terlalu besar (${sizeMB}MB). Maksimal 5MB!`, 'error');
-                    this.value = '';
-                    return;
+                    this.value = ''; // Clear input
+                    return; // STOP - jangan lanjutkan upload
                 }
 
-                // Preview gambar
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    document.querySelector('.profile-picture').src = e.target.result;
-                }
-                reader.readAsDataURL(file);
-
-                // Panggil fungsi update
-                updateProfilePicture(this);
+                // Validasi lolos - lanjutkan upload
+                uploadProfilePicture(file);
             }
         });
 
-        function updateProfilePicture(input) {
-            if (input.files && input.files[0]) {
-                const formData = new FormData();
-                formData.append('profile_picture', input.files[0]);
-
-                fetch('upload_profile.php', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Server response:', data);
-                        if (data.success) {
-                            const profileImg = document.querySelector('.profile-picture');
-                            // Check if it's a full URL (Cloudinary) or relative path
-                            if (data.image_url.startsWith('http')) {
-                                profileImg.src = data.image_url;
-                            } else {
-                                profileImg.src = '../' + data.image_url;
-                            }
-                            showNotification('Foto profil berhasil diperbarui');
-                        } else {
-                            showNotification(data.message, 'error');
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        showNotification('Terjadi kesalahan saat mengupdate foto profil', 'error');
-                    });
+        function uploadProfilePicture(file) {
+            // Preview gambar terlebih dahulu
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.querySelector('.profile-picture').src = e.target.result;
             }
+            reader.readAsDataURL(file);
+
+            // Upload ke server
+            const formData = new FormData();
+            formData.append('profile_picture', file);
+
+            fetch('upload_profile.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Server response:', data);
+                    if (data.success) {
+                        const profileImg = document.querySelector('.profile-picture');
+                        // Check if it's a full URL (Cloudinary) or relative path
+                        if (data.image_url.startsWith('http')) {
+                            profileImg.src = data.image_url;
+                        } else {
+                            profileImg.src = '../' + data.image_url;
+                        }
+                        showNotification('Foto profil berhasil diperbarui');
+                    } else {
+                        showNotification(data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showNotification('Terjadi kesalahan saat mengupdate foto profil', 'error');
+                });
         }
 
         function showNotification(message, type = 'success') {
