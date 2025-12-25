@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
         <div class="profile-card">
-            <div class="profile-header">
+            <div class="profile-header" style="text-align: center;">
                 <div class="profile-picture-container">
                     <img src="<?php
                     $profilePic = $user->profile_picture ?? '';
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
                         style="display: none;">
                 </div>
-                <!-- Keterangan upload di luar container gambar -->
+                <!-- Keterangan upload di bawah foto, centered -->
                 <div
                     style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border-radius: 20px; margin-top: 12px; display: inline-block;">
                     <small style="color: white; font-size: 0.75rem; font-weight: 500;">
