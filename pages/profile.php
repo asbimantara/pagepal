@@ -63,9 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <div class="container">
         <div class="profile-card">
-            <div class="profile-header"
-                style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-                <div class="profile-picture-container" style="margin: 0 auto;">
+            <div class="profile-header">
+                <div class="profile-picture-container">
                     <img src="<?php
                     $profilePic = $user->profile_picture ?? '';
                     // Check if it's a full URL (Cloudinary) or relative path
@@ -85,18 +84,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
                         style="display: none;">
                 </div>
-                <!-- Keterangan upload di bawah foto, centered -->
-                <div
-                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border-radius: 20px; margin-top: 12px;">
-                    <small style="color: white; font-size: 0.75rem; font-weight: 500;">
-                        <i class="fas fa-cloud-upload-alt"></i> Maks. 5MB • JPG, PNG
-                    </small>
-                </div>
                 <h1><?php echo htmlspecialchars($user->name); ?></h1>
                 <p class="join-date">
                     <i class="fas fa-calendar-alt"></i>
                     Bergabung sejak <?php echo $user->created_at->toDateTime()->format('d M Y'); ?>
                 </p>
+                <!-- Keterangan upload -->
+                <div style="background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 15px; margin-top: 10px; display: inline-block;">
+                    <small style="color: white; font-size: 0.75rem;">
+                        <i class="fas fa-cloud-upload-alt"></i> Maks. 5MB • JPG, PNG
+                    </small>
+                </div>
             </div>
 
             <?php if (isset($error)): ?>
