@@ -20,6 +20,16 @@ if (!isset($user->books[$bookIndex])) {
 
 $book = $user->books[$bookIndex];
 
+// Array URL gambar default untuk sampul buku
+$defaultBookCovers = [
+    ['url' => '../assets/images/covers/1.png', 'label' => 'Cover 1'],
+    ['url' => '../assets/images/covers/2.png', 'label' => 'Cover 2'],
+    ['url' => '../assets/images/covers/3.png', 'label' => 'Cover 3'],
+    ['url' => '../assets/images/covers/4.png', 'label' => 'Cover 4'],
+    ['url' => '../assets/images/covers/5.png', 'label' => 'Cover 5'],
+    ['url' => '../assets/images/covers/6.png', 'label' => 'Cover 6']
+];
+
 // Tambahkan pengecekan jumlah catatan
 $maxNotes = 3;
 $currentNoteCount = isset($book->notes) ? count($book->notes) : 0;
@@ -85,18 +95,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
 
         <div class="book-detail">
             <div class="book-header">
-                <div class="book-cover" onclick="document.getElementById('coverInput').click()">
+                <div class="book-cover">
                     <img src="<?php echo htmlspecialchars($book->cover_url); ?>"
-                        alt="<?php echo htmlspecialchars($book->title); ?>">
-                    <div class="cover-edit-overlay">
-                        <button class="edit-cover-btn">
-                            <i class="fas fa-camera"></i>
+                        alt="<?php echo htmlspecialchars($book->title); ?>" id="currentCoverImg">
+                    <div class="cover-actions" style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
+                        <button type="button" class="btn-cover-action" onclick="openCoverModal()" title="Pilih Cover Default">
+                            <i class="fas fa-images"></i>
+                        </button>
+                        <button type="button" class="btn-cover-action" onclick="document.getElementById('coverInput').click()" title="Upload Cover">
+                            <i class="fas fa-upload"></i>
                         </button>
                     </div>
                     <input type="file" id="coverInput" accept="image/jpeg,image/png,image/jpg"
                         onchange="updateCover(this)" style="display: none;">
-                    <small style="display: block; text-align: center; color: #666; margin-top: 8px; font-size: 0.8rem;">
-                        <i class="fas fa-info-circle"></i> Klik untuk ganti cover (Maks. 5MB)
+                    <small style="display: block; text-align: center; color: #666; margin-top: 8px; font-size: 0.75rem;">
+                        <i class="fas fa-info-circle"></i> Pilih default atau upload (Maks. 5MB)
                     </small>
                 </div>
                 <div class="book-info">
@@ -442,7 +455,153 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                 }, 5000);
             });
         });
+
+        // Modal dan Cover Default Functions
+        function openCoverModal() {
+            document.getElementById('coverModal').style.display = 'flex';
+        }
+
+        function closeCoverModal() {
+            document.getElementById('coverModal').style.display = 'none';
+        }
+
+        function selectDefaultCover(url) {
+            // Update cover via AJAX
+            const formData = new FormData();
+            formData.append('book_index', '<?php echo $bookIndex; ?>');
+            formData.append('cover_url', url);
+
+            fetch('update-cover-url.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    closeCoverModal();
+                    window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_success=1`;
+                } else {
+                    alert('Gagal mengubah cover: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Terjadi kesalahan saat mengubah cover');
+            });
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('coverModal');
+            if (event.target === modal) {
+                closeCoverModal();
+            }
+        }
     </script>
+
+    <!-- Cover Modal -->
+    <div id="coverModal" class="cover-modal" style="display: none;">
+        <div class="cover-modal-content">
+            <div class="cover-modal-header">
+                <h3>Pilih Cover Default</h3>
+                <button class="close-modal" onclick="closeCoverModal()">&times;</button>
+            </div>
+            <div class="cover-modal-grid">
+                <?php foreach ($defaultBookCovers as $cover): ?>
+                <div class="cover-modal-item" onclick="selectDefaultCover('<?php echo $cover['url']; ?>')">
+                    <img src="<?php echo $cover['url']; ?>" alt="<?php echo $cover['label']; ?>">
+                    <span><?php echo $cover['label']; ?></span>
+                </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .btn-cover-action {
+            background: var(--primary-color, #6c63ff);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-cover-action:hover {
+            transform: scale(1.1);
+            background: #5a52e0;
+        }
+        .cover-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .cover-modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .cover-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        .cover-modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+        .cover-modal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding: 1.5rem;
+        }
+        .cover-modal-item {
+            cursor: pointer;
+            text-align: center;
+            padding: 0.5rem;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        .cover-modal-item:hover {
+            border-color: var(--primary-color, #6c63ff);
+            background: #f8f9fa;
+        }
+        .cover-modal-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .cover-modal-item span {
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
 
     <?php include '../layouts/footer.php'; ?>
 </body>
