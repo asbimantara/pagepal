@@ -429,7 +429,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                 formData.append('book_index', '<?php echo $bookIndex; ?>');
 
                 // Tampilkan loading state
-                const coverImg = input.parentElement.querySelector('img');
+                const coverImg = document.getElementById('currentCoverImg');
                 coverImg.style.opacity = '0.5';
 
                 fetch('update-cover.php', {
