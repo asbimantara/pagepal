@@ -95,22 +95,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
 
         <div class="book-detail">
             <div class="book-header">
-                <div class="book-cover">
-                    <img src="<?php echo htmlspecialchars($book->cover_url); ?>"
-                        alt="<?php echo htmlspecialchars($book->title); ?>" id="currentCoverImg">
-                    <div class="cover-actions" style="margin-top: 10px; display: flex; gap: 8px; justify-content: center;">
-                        <button type="button" class="btn-cover-action" onclick="openCoverModal()" title="Pilih Cover Default">
-                            <i class="fas fa-images"></i>
-                        </button>
-                        <button type="button" class="btn-cover-action" onclick="document.getElementById('coverInput').click()" title="Upload Cover">
-                            <i class="fas fa-upload"></i>
-                        </button>
+                <div class="book-cover-section">
+                    <div class="current-cover">
+                        <img src="<?php echo htmlspecialchars($book->cover_url); ?>"
+                            alt="<?php echo htmlspecialchars($book->title); ?>" id="currentCoverImg">
                     </div>
-                    <input type="file" id="coverInput" accept="image/jpeg,image/png,image/jpg"
-                        onchange="updateCover(this)" style="display: none;">
-                    <small style="display: block; text-align: center; color: #666; margin-top: 8px; font-size: 0.75rem;">
-                        <i class="fas fa-info-circle"></i> Pilih default atau upload (Maks. 5MB)
-                    </small>
+
+                    <!-- Cover Change Options -->
+                    <div class="cover-change-options" style="margin-top: 15px;">
+                        <p style="text-align: center; font-weight: bold; margin-bottom: 10px; color: #333;">
+                            <i class="fas fa-edit"></i> Ganti Sampul Buku
+                        </p>
+                        <div class="cover-btn-group"
+                            style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+                            <button type="button" class="btn-change-cover" onclick="openCoverModal()"
+                                style="background: #6c63ff; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                <i class="fas fa-images"></i> Pilih Default
+                            </button>
+                            <button type="button" class="btn-change-cover"
+                                onclick="document.getElementById('coverInput').click()"
+                                style="background: #28a745; color: white; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                <i class="fas fa-upload"></i> Upload Foto
+                            </button>
+                        </div>
+                        <input type="file" id="coverInput" accept="image/jpeg,image/png,image/jpg"
+                            onchange="updateCover(this)" style="display: none;">
+                        <small
+                            style="display: block; text-align: center; color: #888; margin-top: 10px; font-size: 0.75rem;">
+                            <i class="fas fa-info-circle"></i> Maksimal 5MB (JPG, PNG)
+                        </small>
+                    </div>
                 </div>
                 <div class="book-info">
                     <h1><?php echo htmlspecialchars($book->title); ?></h1>
@@ -475,23 +489,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    closeCoverModal();
-                    window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_success=1`;
-                } else {
-                    alert('Gagal mengubah cover: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Terjadi kesalahan saat mengubah cover');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        closeCoverModal();
+                        window.location.href = `book-detail.php?index=<?php echo $bookIndex; ?>&cover_success=1`;
+                    } else {
+                        alert('Gagal mengubah cover: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat mengubah cover');
+                });
         }
 
         // Close modal when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modal = document.getElementById('coverModal');
             if (event.target === modal) {
                 closeCoverModal();
@@ -508,10 +522,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             </div>
             <div class="cover-modal-grid">
                 <?php foreach ($defaultBookCovers as $cover): ?>
-                <div class="cover-modal-item" onclick="selectDefaultCover('<?php echo $cover['url']; ?>')">
-                    <img src="<?php echo $cover['url']; ?>" alt="<?php echo $cover['label']; ?>">
-                    <span><?php echo $cover['label']; ?></span>
-                </div>
+                    <div class="cover-modal-item" onclick="selectDefaultCover('<?php echo $cover['url']; ?>')">
+                        <img src="<?php echo $cover['url']; ?>" alt="<?php echo $cover['label']; ?>">
+                        <span><?php echo $cover['label']; ?></span>
+                    </div>
                 <?php endforeach; ?>
             </div>
         </div>
@@ -531,22 +545,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             align-items: center;
             justify-content: center;
         }
+
         .btn-cover-action:hover {
             transform: scale(1.1);
             background: #5a52e0;
         }
+
         .cover-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
         }
+
         .cover-modal-content {
             background: white;
             border-radius: 12px;
@@ -555,6 +572,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             max-height: 80vh;
             overflow-y: auto;
         }
+
         .cover-modal-header {
             display: flex;
             justify-content: space-between;
@@ -562,10 +580,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             padding: 1rem 1.5rem;
             border-bottom: 1px solid #eee;
         }
+
         .cover-modal-header h3 {
             margin: 0;
             color: #333;
         }
+
         .close-modal {
             background: none;
             border: none;
@@ -573,12 +593,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             cursor: pointer;
             color: #666;
         }
+
         .cover-modal-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
             padding: 1.5rem;
         }
+
         .cover-modal-item {
             cursor: pointer;
             text-align: center;
@@ -587,16 +609,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['note'])) {
             border-radius: 8px;
             transition: all 0.3s ease;
         }
+
         .cover-modal-item:hover {
             border-color: var(--primary-color, #6c63ff);
             background: #f8f9fa;
         }
+
         .cover-modal-item img {
             width: 100%;
             height: auto;
             border-radius: 4px;
             margin-bottom: 0.5rem;
         }
+
         .cover-modal-item span {
             font-size: 0.8rem;
             color: #666;
