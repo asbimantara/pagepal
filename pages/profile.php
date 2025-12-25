@@ -83,8 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </label>
                     <input type="file" id="profile-upload" class="profile-upload" accept="image/*"
                         style="display: none;">
-                    <small style="display: block; text-align: center; color: #666; margin-top: 8px;">
-                        <i class="fas fa-info-circle"></i> Maksimal 5MB (JPG, PNG)
+                </div>
+                <!-- Keterangan upload di luar container gambar -->
+                <div
+                    style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 8px 16px; border-radius: 20px; margin-top: 12px; display: inline-block;">
+                    <small style="color: white; font-size: 0.75rem; font-weight: 500;">
+                        <i class="fas fa-cloud-upload-alt"></i> Maks. 5MB • JPG, PNG
                     </small>
                 </div>
                 <h1><?php echo htmlspecialchars($user->name); ?></h1>
